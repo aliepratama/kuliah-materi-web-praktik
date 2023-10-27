@@ -1,5 +1,6 @@
 from app import db
 from datetime import datetime
+from .user import Users
 
 
 class Todos(db.Model):
