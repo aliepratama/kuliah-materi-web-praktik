@@ -18,4 +18,4 @@ class Users(db.Model):
         self.password = generate_password_hash(password)
 
     def checkPassword(self, password):
-        return check_password_hash(password)
+        return check_password_hash(self.password, password)

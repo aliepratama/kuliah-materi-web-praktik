@@ -88,3 +88,22 @@ def delete(id):
 
     except Exception as e:
         print(e)
+
+
+def login():
+    try:
+        email = request.json['email']
+        password = request.json['password']
+
+        user = Users.query.filter_by(email=email).first()
+        if not user:
+            return response.badRequest([], 'Empty ...')
+
+        if not user.checkPassword(password):
+            return response.badRequest([], 'Your credential is invalid')
+
+        data = singleTransform(user)
+        return response.ok(data, 'Successfully login!')
+
+    except Exception as e:
+        print(e)
