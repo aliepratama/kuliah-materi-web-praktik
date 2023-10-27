@@ -10,6 +10,8 @@ class Todos(db.Model):
     created_at = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.BigInteger, db.ForeignKey('users.id'))
+    token_access = db.Column(db.Text, nullable=True)
+    token_refresh = db.Column(db.Text, nullable=True)
     users = db.relationship('Users', backref='user_id')
 
     def __repr__(self):

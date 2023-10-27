@@ -2,8 +2,10 @@ from app.model.todo import Todos as Todo
 from flask import request, jsonify
 from app import response, db
 from app.controller import UserController
+from flask_jwt_extended import *
 
 
+@jwt_required()
 def index():
     try:
         id = request.args.get('user_id')
@@ -88,3 +90,16 @@ def singleTransform(values):
         'user': UserController.singleTransform(values.users, withTodo=False)
     }
     return data
+
+
+@jwt_required(refresh=True)
+def refresh():
+    try:
+        user = get_jwt_identity()
+        new_token = create_access_token(identity=user)
+
+        return response.ok({
+            'token_access': new_token
+        }, "")
+    except Exception as e:
+        print(e)

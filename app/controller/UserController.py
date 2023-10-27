@@ -1,6 +1,8 @@
 from app.model.user import Users
 from app import response, app, db
 from flask import request
+from datetime import timedelta
+from flask_jwt_extended import *
 
 
 def transform(users):
@@ -111,8 +113,16 @@ def login():
         if not user.checkPassword(password):
             return response.badRequest([], 'Your credential is invalid')
 
-        data = singleTransform(user)
-        return response.ok(data, 'Successfully login!')
+        data = singleTransform(user, withTodo=False)
+        expires = timedelta(days=1)
+        expires_refresh = timedelta(days=3)
+        access_token = create_access_token(data, fresh=True, expires_delta=expires)
+        refresh_token = create_refresh_token(data, expires_delta=expires_refresh)
+        return response.ok({
+            "data": data,
+            "token_access": access_token,
+            "token_refresh": refresh_token,
+        }, 'Successfully login!')
 
     except Exception as e:
         print(e)
