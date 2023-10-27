@@ -3,3 +3,4 @@ DB_HOST=localhost
 DB_DATABASE=db_toko
 DB_USERNAME=root
 DB_PASSWORD=
+FLASK_DEBUG=1
