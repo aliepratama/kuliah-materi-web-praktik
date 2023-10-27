@@ -56,3 +56,35 @@ def store():
         return response.ok('', 'Successfully create data!')
     except Exception as e:
         print(e)
+
+
+def update(id):
+    try:
+        name = request.json['name']
+        email = request.json['email']
+        password = request.json['password']
+
+        user = Users.query.filter_by(id=id).first()
+        user.email = email
+        user.name = name
+        user.setPassword(password)
+        db.session.commit()
+
+        return response.ok('', 'Successfully update data!')
+
+    except Exception as e:
+        print(e)
+
+
+def delete(id):
+    try:
+        user = Users.query.filter_by(id=id).first()
+        if not user:
+            return response.badRequest([], 'Empty ...')
+        db.session.delete(user)
+        db.session.commit()
+
+        return response.ok('', 'Successfully delete data!')
+
+    except Exception as e:
+        print(e)
