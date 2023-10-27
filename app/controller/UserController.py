@@ -1,5 +1,6 @@
 from app.model.user import Users
-from app import response, app
+from app import response, app, db
+from flask import request
 
 
 def transform(users):
@@ -12,6 +13,7 @@ def transform(users):
         })
     return array
 
+
 def index():
     try:
         users = Users.query.all()
@@ -19,6 +21,7 @@ def index():
         return response.ok(data, "")
     except Exception as e:
         print(e)
+
 
 def singleTransform(users):
     data = {
@@ -28,6 +31,7 @@ def singleTransform(users):
     }
     return data
 
+
 def show(id):
     try:
         users = Users.query.filter_by(id=id).first()
@@ -35,5 +39,20 @@ def show(id):
             return response.badRequest([], 'Empty ...')
         data = singleTransform(users)
         return response.ok(data, "")
+    except Exception as e:
+        print(e)
+
+
+def store():
+    try:
+        name = request.json['name']
+        email = request.json['email']
+        password = request.json['password']
+        users = Users(name=name, email=email)
+        users.setPassword(password)
+        db.session.add(users)
+        db.session.commit()
+
+        return response.ok('', 'Successfully create data!')
     except Exception as e:
         print(e)
