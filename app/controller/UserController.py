@@ -23,12 +23,21 @@ def index():
         print(e)
 
 
-def singleTransform(users):
+def singleTransform(users, withTodo=False):
     data = {
         'id': users.id,
         'name': users.name,
         'email': users.email
     }
+    if withTodo:
+        todos = []
+        for i in users.todos:
+            todos.append({
+                'id': i.id,
+                'todo': i.todo,
+                'description': i.description,
+            })
+        data['todos'] = todos
     return data
 
 
